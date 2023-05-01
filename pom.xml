@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<!-- Version of Spring Boot. -->
+		<version>3.0.6</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>com.dsuite.dnd.ds</groupId>
+	<artifactId>writer</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>D&amp;D - Dark Souls - Writer</name>
+	<description>This service reads from a messaging service and writes the provided json message to a database.</description>
+
+	<properties>
+		<java.version>20</java.version>
+		<spring-cloud-gcp.version>4.2.0</spring-cloud-gcp.version>
+		<spring-cloud.version>2022.0.2</spring-cloud.version>
+	</properties>
+
+	<dependencies>
+		<!-- Adds the GCP Support entry and all the required dependencies so that the Google Cloud Pub/Sub integration work out of the box. -->
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-pubsub</artifactId>
+		</dependency>
+		<!-- Provides integration with Secret Manager. -->
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-secretmanager</artifactId>
+		</dependency>
+		<!-- Java annotation library which helps to reduce boilerplate code. -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!-- The spring-boot-starter-test is the primary dependency that contains the majority of elements required for our tests. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>spring-cloud-gcp-dependencies</artifactId>
+				<version>${spring-cloud-gcp.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<!-- The Spring Boot Maven Plugin provides Spring Boot support in Apache Maven.
+				It allows you to package executable jar or war archives, run Spring Boot applications,
+				generate build information and start your Spring Boot application prior to
+				running integration tests. -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!-- Simplifies the process of building and pushing container images without a Dockerfile or a Docker installation. -->
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<to>
+						<image>gcr.io/dsuite-dnd-ds-test/writer-image</image>
+					</to>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
